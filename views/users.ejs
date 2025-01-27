@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="/css/styles.css">
+  <!-- <link rel="stylesheet" href=""> -->
+  <title>User Management</title>
+</head>
+<body>
+  <%- include('/views/partials/admin/header') %>
+  <h2>User Management</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Role</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% users.forEach(user => { %>
+        <tr>
+          <td><%= user.username %></td>
+          <td><%= user.role %></td>
+          <td>
+            <form action="/admin/users/delete/<%= user.id %>" method="POST" style="display:inline;">
+              <button type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <h3>Add New User</h3>
+  <form action="/admin/users" method="POST">
+    <label for="username">Username:</label>
+    <input type="text" name="username" id="username" required>
+    <label for="password">Password:</label>
+    <input type="password" name="password" id="password" required>
+    <label for="role">Role:</label>
+    <select name="role" id="role">
+      <option value="admin">Admin</option>
+      <option value="editor">Editor</option>
+    </select>
+    <button type="submit">Add User</button>
+  </form>
+  <%- include('/views/partials/admin/footer') %>
+</body>
+</html>
