@@ -25,36 +25,41 @@
           <td><%= article.tags %></td>
           <td><%= article.created_at %></td>
           <td>
-            <form action="/editor/articles/delete/<%= article.id %>" method="POST" style="display:inline;">
+            <form action="<%= role === 'admin' ? '/admin/articles/delete/' + article.id : '/editor/articles/delete/' + article.id %>" method="POST" style="display:inline;">
               <button type="submit">Delete</button>
             </form>
-          </td>
+          </td>          
         </tr>
       <% }) %>
     </tbody>
   </table>
 
   <h3>Add New Article</h3>
-  <form action="/admin/articles" method="POST" enctype="multipart/form-data">
+  <form action="<%= role === 'admin' ? '/admin/articles' : '/editor/articles' %>" method="POST" enctype="multipart/form-data">
     <label for="title">Title:</label>
     <input type="text" name="title" id="title" required>
     <label for="content">Content:</label>
     <textarea name="content" id="content" required></textarea>
     <label for="category">Category:</label>
     <select name="category_id" id="category">
-      <% if (categories && categories.length > 0) { %>
-        <% categories.forEach(category => { %>
-          <option value="<%= category.id %>"><%= category.name %></option>
-        <% }) %>
-      <% } else { %>
-        <option value="">No categories available</option>
-      <% } %>
+      <% categories.forEach(category => { %>
+        <option value="<%= category.id %>"><%= category.name %></option>
+      <% }) %>
     </select>
     <label for="tags">Tags (comma-separated):</label>
     <input type="text" name="tags" id="tags">
     <input type="file" name="image" id="image">
     <button type="submit">Add Article</button>
   </form>
+  <% if (role === 'admin') { %>
+    <h3>Add New Category</h3>
+    <form action="/admin/categories" method="POST">
+      <label for="category_name">Category Name:</label>
+      <input type="text" name="category_name" id="category_name" required>
+      <button type="submit">Add Category</button>
+    </form>
+  <% } %>
+  
   <%- include('partials/admin/footer') %>
 </body>
 </html>

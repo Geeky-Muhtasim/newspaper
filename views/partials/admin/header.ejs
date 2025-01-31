@@ -1,9 +1,10 @@
 <header>
-    <nav>
-      <a href="/admin/dashboard">Dashboard</a>
+  <nav>
+    <a href="/<%= role ? role : 'admin' %>/dashboard">Dashboard</a>
+    <% if (role === 'admin') { %>
       <a href="/admin/users">User Management</a>
-      <a href="/admin/articles">Articles</a>
-      <a href="/logout">Logout</a>
-    </nav>
-  </header>
-  
+    <% } %>
+    <a href="/<%= role ? role : 'admin' %>/articles">Articles</a>
+    <a href="/logout">Logout</a>
+  </nav>
+</header>

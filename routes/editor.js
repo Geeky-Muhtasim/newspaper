@@ -22,21 +22,36 @@ router.get('/dashboard', isAuthenticated, (req, res) => {
 });
 
 // View All Articles
+// router.get('/articles', isAuthenticated, async (req, res) => {
+//   try {
+//     // Fetch articles with their categories
+//     const [articles] = await db.query(
+//       `SELECT a.id, a.title, c.name AS category, a.tags, a.image, a.created_at
+//       FROM articles a
+//       JOIN categories c ON a.category_id = c.id`
+//     );
+
+//     // Fetch all categories separately
+//     const [categories] = await db.query(`SELECT * FROM categories`);
+
+//     // Pass both variables to the template
+//     res.render('articles', { articles, categories });
+
+//   } catch (err) {
+//     console.error(err);
+//     res.send('Error fetching articles.');
+//   }
+// });
 router.get('/articles', isAuthenticated, async (req, res) => {
   try {
-    // Fetch articles with their categories
-    const [articles] = await db.query(
-      `SELECT a.id, a.title, c.name AS category, a.tags, a.image, a.created_at
+    const [articles] = await db.query(`
+      SELECT a.id, a.title, c.name AS category, a.tags, a.image, a.created_at
       FROM articles a
-      JOIN categories c ON a.category_id = c.id`
-    );
-
-    // Fetch all categories separately
+      LEFT JOIN categories c ON a.category_id = c.id
+    `);
     const [categories] = await db.query(`SELECT * FROM categories`);
 
-    // Pass both variables to the template
-    res.render('articles', { articles, categories });
-
+    res.render('articles', { articles, categories, role: 'editor' });
   } catch (err) {
     console.error(err);
     res.send('Error fetching articles.');
